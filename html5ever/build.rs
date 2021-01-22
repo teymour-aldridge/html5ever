@@ -21,13 +21,5 @@ fn main() {
     let output = Path::new(&env::var("OUT_DIR").unwrap()).join("rules.rs");
     println!("cargo:rerun-if-changed={}", input.display());
 
-    // We have stack overflows on Servo's CI.
-    let handle = Builder::new()
-        .stack_size(128 * 1024 * 1024)
-        .spawn(move || {
-            match_token::expand(&input, &output);
-        })
-        .unwrap();
-
-    handle.join().unwrap();
+    match_token::expand(&input, &output);
 }
